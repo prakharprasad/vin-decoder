@@ -88,6 +88,5 @@ export default function App() {
                 </FormControl>
             </SimpleGrid>
         </Center>
-        // </Flex>
     );
 }
