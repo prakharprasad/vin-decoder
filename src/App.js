@@ -63,7 +63,7 @@ export default function App() {
             return;
         }
         toast({
-            title: 'Manfacturing Date',
+            title: 'Manufacturing Date',
             description: `${month_codes[month]} ${year_codes[year]}`,
             status: 'success',
             isClosable: true,
@@ -88,6 +88,5 @@ export default function App() {
                 </FormControl>
             </SimpleGrid>
         </Center>
-        // </Flex>
     );
 }
