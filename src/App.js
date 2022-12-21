@@ -1,5 +1,5 @@
 import {
-    Alert, AlertDescription, AlertIcon, Box, Button, Center, Divider, FormControl, FormHelperText, FormLabel, Image, Input, SimpleGrid, Text, useDisclosure
+    Alert, AlertDescription, AlertIcon, Box, Button, Center, Divider, FormControl, FormLabel, Image, Input, SimpleGrid, Text, useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
@@ -13,8 +13,8 @@ function AlertBox(props) {
                     {props.message}
                 </AlertDescription>
             </Box>
-        </Alert><Divider /></>
-        : <Divider />
+        </Alert></>
+        : null
 
 }
 export default function App() {
@@ -78,20 +78,21 @@ export default function App() {
     }
     return (
         <Center>
-            <SimpleGrid columns={1} spacing={8} justifyItems="left" padding={4}>
+            <SimpleGrid columns={1} spacing={8} justifyItems="left" padding={4} flexDirection="column">
                 <Divider />
                 <Image src="tata.svg" />
                 <Text fontSize="lg">
                     Use this tool to retrieve the manufacturing date of your vehicle through its chassis number or VIN number.
                 </Text>
-                <AlertBox isOpen={isOpen} onClose={onClose} message={alertMsg} type={!hasError ? "success" : "error"} />
+                <Text as={"i"} fontSize={"xs"} >
+                    We do not store your chasis number or any entered data on our server. This project or website is not associated with Tata Motors Limited or its subsidiaries.
+                </Text>
                 <FormControl alignSelf="center">
                     <FormLabel>Chassis / VIN Number</FormLabel>
                     <Input name="chassis" type='email' maxWidth="65%" placeholder="Eg. MAT999999ABC12345" onChange={e => setChassis(e.target.value.toUpperCase())} />
                     <Button type="submit" colorScheme={"green"} variant="outline" margin={2} onClick={e => handleCalculate(e)}>Calculate</Button>
-                    <Divider />
-                    <FormHelperText>We do not store your chasis number or any entered data on our server. This project or website is not associated with Tata Motors Limited or its subsidiaries.</FormHelperText>
                 </FormControl>
+                <AlertBox isOpen={isOpen} onClose={onClose} message={alertMsg} type={!hasError ? "success" : "error"} />
             </SimpleGrid>
         </Center >
     );
