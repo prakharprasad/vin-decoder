@@ -1,5 +1,5 @@
 import {
-    Alert, AlertDescription, AlertIcon, Box, Button, Center, CloseButton, Divider, FormControl, FormHelperText, FormLabel, Image, Input, SimpleGrid, Text, useDisclosure
+    Alert, AlertDescription, AlertIcon, Box, Button, Center, Divider, FormControl, FormHelperText, FormLabel, Image, Input, SimpleGrid, Text, useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
@@ -13,13 +13,6 @@ function AlertBox(props) {
                     {props.message}
                 </AlertDescription>
             </Box>
-            <CloseButton
-                alignSelf='flex-start'
-                position='relative'
-                right={-1}
-                top={-1}
-                onClick={props.onClose}
-            />
         </Alert><Divider /></>
         : <Divider />
 
