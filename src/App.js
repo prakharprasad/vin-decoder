@@ -1,15 +1,37 @@
 import {
-    Button, Center, FormControl, FormHelperText, Text, FormLabel, Image, Input, SimpleGrid, useColorMode, useToast
+    Alert, AlertDescription, AlertIcon, Box, Button, Center, CloseButton, Divider, FormControl, FormHelperText, FormLabel, Image, Input, SimpleGrid, Text, useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
+function AlertBox(props) {
+
+    return props.isOpen ? <>
+        <Alert status={props.type}>
+            <AlertIcon />
+            <Box>
+                <AlertDescription>
+                    {props.message}
+                </AlertDescription>
+            </Box>
+            <CloseButton
+                alignSelf='flex-start'
+                position='relative'
+                right={-1}
+                top={-1}
+                onClick={props.onClose}
+            />
+        </Alert><Divider /></>
+        : <Divider />
+
+}
 export default function App() {
-    const toast = useToast()
-    const { colorMode, toggleColorMode } = useColorMode();
-    const [chassis, setChassis] = useState('');
+    const [chassis, setChassis] = useState('')
+    const [alertMsg, setAlertMsg] = useState('')
+    const [hasError, setHasError] = useState(false)
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     function handleCalculate(e) {
-        e.preventDefault();
+        onClose();
         const month_index = 12 - 1;
         const year_index = 10 - 1;
         const month_codes = {
@@ -52,41 +74,32 @@ export default function App() {
 
         const month = chassis.charAt(month_index);
         const year = chassis.charAt(year_index);
-        toast.closeAll();
+        onOpen();
         if (chassis.length < 17 || (month_codes[month] === undefined || year_codes[year] === undefined)) {
-            toast({
-                title: 'Invalid Chassis or VIN',
-                description: 'Please enter a valid chassis or VIN number',
-                status: 'error',
-                isClosable: true,
-            });
-            return;
+            setHasError(true);
+            setAlertMsg('Invalid Chassis or VIN. Please enter a valid chassis or VIN number.');
+        } else {
+            setHasError(false);
+            setAlertMsg(`Manufacturing Date is ${month_codes[month]} ${year_codes[year]}`);
         }
-        toast({
-            title: 'Manufacturing Date',
-            description: `${month_codes[month]} ${year_codes[year]}`,
-            status: 'success',
-            isClosable: true,
-        });
-        return;
-    }
-    if (colorMode === 'light') {
-        toggleColorMode();
     }
     return (
         <Center>
-            <SimpleGrid columns={1} spacing={16} justifySelf="center" padding={4}>
-                <Image src="tata.svg" mpad />
-                <Text fontSize="sm">
+            <SimpleGrid columns={1} spacing={8} justifyItems="left" padding={4}>
+                <Divider />
+                <Image src="tata.svg" />
+                <Text fontSize="lg">
                     Use this tool to retrieve the manufacturing date of your vehicle through its chassis number or VIN number.
                 </Text>
+                <AlertBox isOpen={isOpen} onClose={onClose} message={alertMsg} type={!hasError ? "success" : "error"} />
                 <FormControl alignSelf="center">
                     <FormLabel>Chassis / VIN Number</FormLabel>
-                    <Input name="chassis" type='email' maxWidth="75vh" placeholder="Eg. MAT999999ABC12345" onChange={e => setChassis(e.target.value.toUpperCase())} />
-                    <Button type="submit" variant="outline" mt={4} onClick={e => handleCalculate(e)}>Calculate</Button>
-                    <FormHelperText>We do not store your chasis number or any entered data on our server.</FormHelperText>
+                    <Input name="chassis" type='email' maxWidth="65%" placeholder="Eg. MAT999999ABC12345" onChange={e => setChassis(e.target.value.toUpperCase())} />
+                    <Button type="submit" colorScheme={"green"} variant="outline" margin={2} onClick={e => handleCalculate(e)}>Calculate</Button>
+                    <Divider />
+                    <FormHelperText>We do not store your chasis number or any entered data on our server. This project or website is not associated with Tata Motors Limited or its subsidiaries.</FormHelperText>
                 </FormControl>
             </SimpleGrid>
-        </Center>
+        </Center >
     );
 }
